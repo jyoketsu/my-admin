@@ -1,10 +1,11 @@
 import { AlipayCircleOutlined, TaobaoCircleOutlined, WeiboCircleOutlined } from '@ant-design/icons';
 import { Alert, Checkbox } from 'antd';
-import React, { useState } from 'react';
-import { Link, connect, Dispatch } from 'umi';
+import React, { useState, useEffect } from 'react';
+import { Link, connect, Dispatch, history } from 'umi';
 import { StateType } from '@/models/login';
 import { LoginParamsType } from '@/services/login';
 import { ConnectState } from '@/models/connect';
+import { User } from '@/models/user';
 import LoginForm from './components/Login';
 
 import styles from './style.less';
@@ -14,6 +15,7 @@ interface LoginProps {
   dispatch: Dispatch;
   userLogin: StateType;
   submitting?: boolean;
+  user: User | null;
 }
 
 const LoginMessage: React.FC<{
@@ -30,18 +32,25 @@ const LoginMessage: React.FC<{
 );
 
 const Login: React.FC<LoginProps> = (props) => {
-  const { userLogin = {}, submitting } = props;
+  const { userLogin = {}, submitting, user } = props;
   const { status, type: loginType } = userLogin;
   const [autoLogin, setAutoLogin] = useState(true);
   const [type, setType] = useState<string>('account');
 
+  useEffect(() => {
+    if (user) {
+      history.push('/welcome');
+    }
+  }, [user]);
+
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
     dispatch({
-      type: 'login/login',
-      payload: { ...values, type },
+      type: 'user/login',
+      ...values,
     });
   };
+
   return (
     <div className={styles.main}>
       <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
@@ -51,7 +60,7 @@ const Login: React.FC<LoginProps> = (props) => {
           )}
 
           <UserName
-            name="userName"
+            name="username"
             placeholder="用户名: admin or user"
             rules={[
               {
@@ -130,7 +139,8 @@ const Login: React.FC<LoginProps> = (props) => {
   );
 };
 
-export default connect(({ login, loading }: ConnectState) => ({
+export default connect(({ user, login, loading }: ConnectState) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
+  user: user.user,
 }))(Login);

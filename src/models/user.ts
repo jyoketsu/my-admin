@@ -1,35 +1,29 @@
-import { Effect, Reducer } from 'umi';
+import { Effect, Reducer, history } from 'umi';
+import { message } from 'antd';
+import { login, loginByToken } from '@/services/user';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
-
-export interface CurrentUser {
-  avatar?: string;
-  name?: string;
-  title?: string;
-  group?: string;
-  signature?: string;
-  tags?: {
-    key: string;
-    label: string;
-  }[];
-  userid?: string;
-  unreadCount?: number;
+export interface User {
+  _id: string;
+  username: string;
+  avatar: string;
+  role: number;
+  email: string;
 }
 
 export interface UserModelState {
-  currentUser?: CurrentUser;
+  user: User | null;
 }
 
 export interface UserModelType {
   namespace: 'user';
   state: UserModelState;
   effects: {
-    fetch: Effect;
-    fetchCurrent: Effect;
+    login: Effect;
+    loginByToken: Effect;
   };
   reducers: {
-    saveCurrentUser: Reducer<UserModelState>;
-    changeNotifyCount: Reducer<UserModelState>;
+    setUser: Reducer<UserModelState>;
+    clearUser: Reducer<UserModelState>;
   };
 }
 
@@ -37,46 +31,50 @@ const UserModel: UserModelType = {
   namespace: 'user',
 
   state: {
-    currentUser: {},
+    user: null,
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *login(action, { call, put }) {
+      const response = yield call(login, action.username, action.password);
+      if (response.status === 200) {
+        window.localStorage.setItem('auth_token', response.token);
+        yield put({
+          type: 'setUser',
+          payload: response,
+        });
+      } else {
+        message.error(response.msg);
+      }
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+
+    *loginByToken(action, { call, put }) {
+      const response = yield call(loginByToken, action.token);
+      if (response.status === 200) {
+        yield put({
+          type: 'setUser',
+          payload: response,
+        });
+      } else {
+        message.error(response.msg);
+        history.push('/user/login');
+      }
     },
   },
 
   reducers: {
-    saveCurrentUser(state, action) {
+    setUser(state, action) {
       return {
         ...state,
-        currentUser: action.payload || {},
+        user: action.payload.result,
       };
     },
-    changeNotifyCount(
-      state = {
-        currentUser: {},
-      },
-      action,
-    ) {
+    clearUser(state) {
+      window.localStorage.clear();
+      history.push('/user/login');
       return {
         ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
+        user: null,
       };
     },
   },

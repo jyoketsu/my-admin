@@ -1,13 +1,24 @@
 import request from '@/utils/request';
+import { API_URL } from './url';
 
-export async function query(): Promise<any> {
-  return request('/api/users');
+export function login(username: string, password: string) {
+  return request.get(`${API_URL}/user/login`, {
+    params: {
+      username,
+      password,
+    },
+  });
 }
 
-export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
+export function register(username: string, password: string) {
+  return request.post(`${API_URL}/user/register`, {
+    data: {
+      username,
+      password,
+    },
+  });
 }
 
-export async function queryNotices(): Promise<any> {
-  return request('/api/notices');
+export function loginByToken() {
+  return request.get(`${API_URL}/user/loginByToken`);
 }

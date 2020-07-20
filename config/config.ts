@@ -57,6 +57,43 @@ export default defineConfig({
               component: './Welcome',
             },
             {
+              path: '/blog',
+              name: '博客管理',
+              icon: 'smile',
+              routes: [
+                {
+                  path: '/blog/category',
+                  name: '分类',
+                  icon: 'smile',
+                  component: './Welcome',
+                },
+                {
+                  path: '/blog/tag',
+                  name: '标签',
+                  icon: 'smile',
+                  component: './Welcome',
+                },
+                {
+                  path: '/blog/posts',
+                  name: '文章',
+                  icon: 'smile',
+                  component: './Welcome',
+                },
+              ],
+            },
+            {
+              path: '/account',
+              name: '个人页',
+              icon: 'user',
+              routes: [
+                {
+                  path: '/account/settings',
+                  name: '个人设置',
+                  component: './account/settings',
+                },
+              ],
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
