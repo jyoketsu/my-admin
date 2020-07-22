@@ -52,7 +52,7 @@ export default defineConfig({
             },
             {
               path: '/welcome',
-              name: 'welcome',
+              name: '欢迎页',
               icon: 'smile',
               component: './Welcome',
             },
@@ -110,7 +110,7 @@ export default defineConfig({
               ],
             },
             {
-              name: 'list.table-list',
+              name: '表格',
               icon: 'table',
               path: '/list',
               component: './ListTableList',
