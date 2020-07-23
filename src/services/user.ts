@@ -22,3 +22,25 @@ export function register(username: string, password: string) {
 export function loginByToken() {
   return request.get(`${API_URL}/user/loginByToken`);
 }
+
+export function update(
+  _id: string,
+  username: string,
+  avatar: string,
+  role: number,
+  email: string,
+  profile: string,
+) {
+  return request.patch(`${API_URL}/user/update`, {
+    data: {
+      _id,
+      updater: {
+        username,
+        avatar,
+        role,
+        email,
+        profile,
+      },
+    },
+  });
+}

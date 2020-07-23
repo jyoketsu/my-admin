@@ -1,6 +1,6 @@
 import { Effect, Reducer, history } from 'umi';
 import { message } from 'antd';
-import { login, loginByToken } from '@/services/user';
+import { login, loginByToken, update } from '@/services/user';
 
 export interface User {
   _id: string;
@@ -8,6 +8,7 @@ export interface User {
   avatar: string;
   role: number;
   email: string;
+  profile: string;
 }
 
 export interface UserModelState {
@@ -20,6 +21,7 @@ export interface UserModelType {
   effects: {
     login: Effect;
     loginByToken: Effect;
+    updateUser: Effect;
   };
   reducers: {
     setUser: Reducer<UserModelState>;
@@ -58,6 +60,25 @@ const UserModel: UserModelType = {
       } else {
         message.error(response.msg);
         history.push('/user/login');
+      }
+    },
+    *updateUser(action, { call, put }) {
+      const response = yield call(
+        update,
+        action.id,
+        action.username,
+        action.avatar,
+        action.role,
+        action.email,
+        action.profile,
+      );
+      if (response.status === 200) {
+        yield put({
+          type: 'setUser',
+          payload: response,
+        });
+      } else {
+        message.error(response.msg);
       }
     },
   },

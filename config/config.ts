@@ -83,12 +83,12 @@ export default defineConfig({
             },
             {
               path: '/account',
-              name: '个人页',
+              name: '个人中心',
               icon: 'user',
               routes: [
                 {
                   path: '/account/settings',
-                  name: '个人设置',
+                  name: '基本设置',
                   component: './account/settings',
                 },
               ],
