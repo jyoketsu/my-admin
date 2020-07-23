@@ -1,6 +1,6 @@
 import { Effect, Reducer, history } from 'umi';
 import { message } from 'antd';
-import { login, loginByToken, update } from '@/services/user';
+import { login, loginByToken, update, detail } from '@/services/user';
 
 export interface User {
   _id: string;
@@ -21,10 +21,12 @@ export interface UserModelType {
   effects: {
     login: Effect;
     loginByToken: Effect;
-    updateUser: Effect;
+    update: Effect;
+    detail: Effect;
   };
   reducers: {
     setUser: Reducer<UserModelState>;
+    updateUser: Reducer<UserModelState>;
     clearUser: Reducer<UserModelState>;
   };
 }
@@ -62,7 +64,20 @@ const UserModel: UserModelType = {
         history.push('/user/login');
       }
     },
-    *updateUser(action, { call, put }) {
+
+    *detail(action, { call, put }) {
+      const response = yield call(detail, action.id);
+      if (response.status === 200) {
+        yield put({
+          type: 'setUser',
+          payload: response,
+        });
+      } else {
+        message.error(response.msg);
+      }
+    },
+
+    *update(action, { call, put }) {
       const response = yield call(
         update,
         action.id,
@@ -73,9 +88,15 @@ const UserModel: UserModelType = {
         action.profile,
       );
       if (response.status === 200) {
+        message.success('信息更新成功！');
         yield put({
-          type: 'setUser',
-          payload: response,
+          type: 'updateUser',
+          user: {
+            username: action.username,
+            avatar: action.avatar,
+            email: action.email,
+            profile: action.profile,
+          },
         });
       } else {
         message.error(response.msg);
@@ -88,6 +109,12 @@ const UserModel: UserModelType = {
       return {
         ...state,
         user: action.payload.result,
+      };
+    },
+    updateUser(state, action) {
+      return {
+        ...state,
+        user: { ...state?.user, ...action.user },
       };
     },
     clearUser(state) {

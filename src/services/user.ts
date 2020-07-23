@@ -23,6 +23,10 @@ export function loginByToken() {
   return request.get(`${API_URL}/user/loginByToken`);
 }
 
+export function detail(_id: string) {
+  return request.get(`${API_URL}/user/detail`, { params: { _id } });
+}
+
 export function update(
   _id: string,
   username: string,

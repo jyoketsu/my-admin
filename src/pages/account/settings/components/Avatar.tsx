@@ -1,7 +1,16 @@
 import React from 'react';
+import styles from './Avatar.less';
 
-const Avatar: React.FC = () => {
-  return <div>头像</div>;
+interface Props {
+  uri: string | undefined;
+}
+
+const Avatar: React.FC<Props> = ({ uri }) => {
+  return (
+    <div className={styles.avatar}>
+      <i style={{ backgroundImage: `url(${uri})` }} />
+    </div>
+  );
 };
 
 export default Avatar;
