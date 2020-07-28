@@ -62,22 +62,28 @@ export default defineConfig({
               icon: 'smile',
               routes: [
                 {
+                  path: '/blog/posts',
+                  name: '文章管理',
+                  icon: 'smile',
+                  component: './Welcome',
+                },
+                {
                   path: '/blog/category',
-                  name: '分类',
+                  name: '分类管理',
                   icon: 'smile',
                   component: './Welcome',
                 },
                 {
                   path: '/blog/tag',
-                  name: '标签',
+                  name: '标签管理',
                   icon: 'smile',
                   component: './Welcome',
                 },
                 {
-                  path: '/blog/posts',
-                  name: '文章',
+                  path: '/blog/link',
+                  name: '网站链接',
                   icon: 'smile',
-                  component: './Welcome',
+                  component: './blog/link',
                 },
               ],
             },

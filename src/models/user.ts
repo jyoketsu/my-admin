@@ -53,7 +53,7 @@ const UserModel: UserModelType = {
     },
 
     *loginByToken(action, { call, put }) {
-      const response = yield call(loginByToken, action.token);
+      const response = yield call(loginByToken);
       if (response.status === 200) {
         yield put({
           type: 'setUser',
@@ -61,7 +61,10 @@ const UserModel: UserModelType = {
         });
       } else {
         message.error(response.msg);
-        history.push('/user/login');
+        // history.push('/user/login');
+        yield put({
+          type: 'clearUser',
+        });
       }
     },
 
