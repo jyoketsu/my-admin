@@ -48,7 +48,7 @@ const UserModel: UserModelType = {
           payload: response,
         });
       } else {
-        message.error(response.msg);
+        message.error(response.msg || '服务出错');
       }
     },
 
@@ -60,7 +60,7 @@ const UserModel: UserModelType = {
           payload: response,
         });
       } else {
-        message.error(response.msg);
+        message.error(response.msg || '服务出错');
         // history.push('/user/login');
         yield put({
           type: 'clearUser',
@@ -76,7 +76,7 @@ const UserModel: UserModelType = {
           payload: response,
         });
       } else {
-        message.error(response.msg);
+        message.error(response.msg || '服务出错');
       }
     },
 
@@ -102,7 +102,7 @@ const UserModel: UserModelType = {
           },
         });
       } else {
-        message.error(response.msg);
+        message.error(response.msg || '服务出错');
       }
     },
   },
