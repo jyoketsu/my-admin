@@ -4,19 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { ConnectState } from '@/models/connect';
 import { connect, ConnectProps, Dispatch } from 'umi';
-import { Card, Modal, Form, Input, Row, Col, Select, Article, Avatar, Pagination } from 'antd';
+import { Card, Modal, List, Space, Button } from 'antd';
 import { Article as ArticleType } from '@/models/article';
 import moment from 'moment';
 import {
-  PlusOutlined,
+  EyeOutlined,
+  ExclamationCircleOutlined,
   EditOutlined,
   DeleteOutlined,
-  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 
 const { confirm } = Modal;
-const { Option } = Select;
-const { Meta } = Card;
 
 interface Props extends ConnectProps {
   dispatch: Dispatch;
@@ -56,50 +54,94 @@ const ArticleComp: React.FC<Props> = ({ dispatch, articles, total }) => {
 
   return (
     <PageContainer>
-      <Row gutter={[16, 24]}>
-        <Col className="gutter-row" xs={24} sm={12} md={6} xxl={4}>
-          <Card
-            key="addArticle"
-            hoverable
-            onClick={() => setModalVisible(true)}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '195px',
-            }}
-          >
-            <PlusOutlined />
-            <span>添加标签</span>
-          </Card>
-        </Col>
-        {articles.map((article) => (
-          <Col key={article._id} className="gutter-row" xs={24} sm={12} md={6} xxl={4}>
-            <Card hoverable>
-              <Meta
-                title={article.title}
+      <Card extra={<Button type="primary">新建文章</Button>}>
+        <List
+          itemLayout="vertical"
+          size="large"
+          pagination={{
+            onChange: (page) => {
+              setCurrent(page);
+              (document.getElementById('root') as HTMLElement).scrollTop = 0;
+            },
+            total,
+            pageSize,
+          }}
+          dataSource={articles}
+          footer={<div>{`总条数：${total}`}</div>}
+          renderItem={(item) => (
+            <List.Item
+              key={item.title}
+              actions={[
+                <IconText icon={EditOutlined} text="编辑" key="list-vertical-edit" />,
+                <IconText
+                  icon={DeleteOutlined}
+                  text="删除"
+                  key="list-vertical-delete"
+                  onClick={() => deleteConfirm(item)}
+                />,
+              ]}
+              extra={item.cover ? <Cover coverUri={item.cover} /> : null}
+            >
+              <List.Item.Meta
+                title={item.title}
                 description={
                   <div>
-                    <p>{`更新：${moment(article.updateTime).fromNow()}`}</p>
+                    <IconText
+                      icon={EyeOutlined}
+                      text={`${item.viewCount}`}
+                      key="list-vertical-count"
+                    />
+                    <span style={{ marginLeft: '18px' }}>
+                      {moment(item.updateTime).format('YYYY-MM-DD')}
+                    </span>
                   </div>
                 }
               />
-            </Card>
-          </Col>
-        ))}
-      </Row>
-      <Pagination
-        current={current}
-        pageSize={pageSize}
-        total={total}
-        onChange={(page) => {
-          setCurrent(page);
-          (document.getElementById('root') as HTMLElement).scrollTop = 0;
-        }}
-      />
+              {item.snippet}
+            </List.Item>
+          )}
+        />
+      </Card>
     </PageContainer>
   );
 };
+
+interface IconTextProps {
+  icon: React.FunctionComponent;
+  text: string;
+  onClick?: Function;
+}
+const IconText = ({ icon, text, onClick }: IconTextProps) => {
+  function handleClick() {
+    if (onClick) {
+      onClick();
+    }
+  }
+  return (
+    <span onClick={handleClick}>
+      <Space>
+        {React.createElement(icon)}
+        {text}
+      </Space>
+    </span>
+  );
+};
+
+interface CoverProps {
+  coverUri: string;
+}
+
+const Cover = ({ coverUri }: CoverProps) => (
+  <div
+    style={{
+      width: '272px',
+      height: '100%',
+      backgroundImage: `url(${coverUri})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}
+  />
+);
 
 export default connect(({ article }: ConnectState) => ({
   articles: article.articles,

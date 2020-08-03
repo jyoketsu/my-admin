@@ -67,6 +67,11 @@ export default defineConfig({
                   component: './blog/article',
                 },
                 {
+                  path: '/blog/post',
+                  name: '文章编辑',
+                  component: './blog/editor',
+                },
+                {
                   path: '/blog/category',
                   name: '类别管理',
                   component: './blog/category',
