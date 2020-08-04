@@ -1,10 +1,20 @@
 @import '~antd/lib/style/themes/default.less';
 
-.editorWrapper {
+.editorContainer {
   display: flex;
-  height: 100%;
 }
-.left,
-.right {
+.editorWrapper,
+.editorPreview {
   flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+.editorPreview {
+  padding-left: 15px;
+}
+
+.categoryAndTag {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Effect, Reducer } from 'umi';
 import { message } from 'antd';
-import { get, add, update, remove } from '@/services/article';
+import { get, getById, add, update, remove } from '@/services/article';
 
 export interface Article {
   _id: string;
@@ -37,7 +37,6 @@ export interface ArticleModelType {
     setArticles: Reducer<ArticleModelState>;
     setArticle: Reducer<ArticleModelState>;
     pushArticles: Reducer<ArticleModelState>;
-    updateArticles: Reducer<ArticleModelState>;
     deleteArticleState: Reducer<ArticleModelState>;
     clearArticle: Reducer<ArticleModelState>;
   };
@@ -78,7 +77,7 @@ const UserModel: ArticleModelType = {
     },
 
     *getArticleById(action, { call, put }) {
-      const response = yield call(get, action._id);
+      const response = yield call(getById, action._id);
       if (response.status === 200) {
         yield put({
           type: 'setArticle',
@@ -99,9 +98,10 @@ const UserModel: ArticleModelType = {
         action.auth,
         action.category,
         action.tags,
-        action.type,
+        action.articleType,
       );
       if (response.status === 200) {
+        message.success('创建成功！');
         yield put({
           type: 'pushArticles',
           payload: response,
@@ -111,28 +111,19 @@ const UserModel: ArticleModelType = {
       }
     },
 
-    *updateArticle(action, { call, put }) {
+    *updateArticle(action, { call }) {
       const response = yield call(
         update,
         action._id,
         action.title,
+        action.cover,
+        action.snippet,
         action.content,
         action.category,
         action.tags,
-        action.cover,
-        action.snippet,
       );
       if (response.status === 200) {
-        yield put({
-          type: 'updateArticles',
-          _id: action._id,
-          title: action.title,
-          content: action.content,
-          category: action.category,
-          tags: action.tags,
-          cover: action.cover,
-          snippet: action.snippet,
-        });
+        message.success('保存成功！');
       } else {
         message.error(response.msg || '服务出错');
       }
@@ -172,36 +163,6 @@ const UserModel: ArticleModelType = {
         ...state,
         articles,
         total: state ? state.total + 1 : 0,
-      } as ArticleModelState;
-    },
-    updateArticles(state, action) {
-      // 更新articles
-      const articles = state ? [...state.articles] : [];
-      const index = articles.findIndex((article) => article._id === action._id);
-      const current = articles[index];
-      if (index !== -1) {
-        current.title = action.title;
-        current.content = action.content;
-        current.category = action.category;
-        current.tags = action.tags;
-        current.cover = action.cover;
-        current.snippet = action.snippet;
-      }
-      // 更新article
-      let article = { ...state?.article };
-      article = {
-        ...article,
-        ...{
-          content: action.content,
-          category: action.category,
-          tags: action.tag,
-          updateTime: new Date(),
-        },
-      };
-      return {
-        ...state,
-        articles,
-        article,
       } as ArticleModelState;
     },
     deleteArticleState(state, action) {

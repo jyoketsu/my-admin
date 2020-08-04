@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { ConnectState } from '@/models/connect';
-import { connect, ConnectProps, Dispatch } from 'umi';
+import { connect, ConnectProps, Dispatch, history } from 'umi';
 import { Card, Modal, List, Space, Button } from 'antd';
 import { Article as ArticleType } from '@/models/article';
 import moment from 'moment';
@@ -54,7 +54,13 @@ const ArticleComp: React.FC<Props> = ({ dispatch, articles, total }) => {
 
   return (
     <PageContainer>
-      <Card extra={<Button type="primary">新建文章</Button>}>
+      <Card
+        extra={
+          <Button type="primary" onClick={() => history.push('/blog/post')}>
+            新建文章
+          </Button>
+        }
+      >
         <List
           itemLayout="vertical"
           size="large"
@@ -72,7 +78,12 @@ const ArticleComp: React.FC<Props> = ({ dispatch, articles, total }) => {
             <List.Item
               key={item.title}
               actions={[
-                <IconText icon={EditOutlined} text="编辑" key="list-vertical-edit" />,
+                <IconText
+                  icon={EditOutlined}
+                  text="编辑"
+                  key="list-vertical-edit"
+                  onClick={() => history.push({ pathname: '/blog/post', query: { id: item._id } })}
+                />,
                 <IconText
                   icon={DeleteOutlined}
                   text="删除"
