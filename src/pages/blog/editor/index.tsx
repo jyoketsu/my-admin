@@ -44,6 +44,11 @@ const Editor: React.FC<Props> = ({ dispatch, location, article, categories, tags
         type: 'category/getCategories',
       });
     }
+    return () => {
+      dispatch({
+        type: 'article/clearArticle',
+      });
+    };
   }, [dispatch]);
 
   // 获取文章详情

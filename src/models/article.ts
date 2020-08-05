@@ -163,6 +163,7 @@ const UserModel: ArticleModelType = {
         ...state,
         articles,
         total: state ? state.total + 1 : 0,
+        article: action.payload.result,
       } as ArticleModelState;
     },
     deleteArticleState(state, action) {

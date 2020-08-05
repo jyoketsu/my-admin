@@ -51,9 +51,10 @@ const errorHandler = (error: { response: Response }): Response => {
 const request = extend({
   errorHandler, // 默认错误处理
   // credentials: 'include', // 默认请求是否带上cookie
-  headers: {
-    token: (localStorage.getItem('auth_token') ? localStorage.getItem('auth_token') : '') as string,
-  },
+  // TODO 这里token不会取最新的，所以先放每个请求中，有更好的方法再优化
+  // headers: {
+  //   token: (localStorage.getItem('auth_token') ? localStorage.getItem('auth_token') : '') as string,
+  // },
 });
 
 export default request;

@@ -6,8 +6,7 @@ type DefaultSettings = ProSettings & {
 
 const proSettings: DefaultSettings = {
   navTheme: 'dark',
-  // 拂晓蓝
-  primaryColor: '#1890ff',
+  primaryColor: '#005CAF',
   layout: 'side',
   contentWidth: 'Fluid',
   fixedHeader: false,

@@ -116,12 +116,12 @@ export default defineConfig({
                 },
               ],
             },
-            {
-              name: '表格',
-              icon: 'table',
-              path: '/list',
-              component: './ListTableList',
-            },
+            // {
+            //   name: '表格',
+            //   icon: 'table',
+            //   path: '/list',
+            //   component: './ListTableList',
+            // },
             {
               component: './404',
             },

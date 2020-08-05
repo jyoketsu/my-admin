@@ -7,7 +7,6 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
-    "deploy": "npm run site && npm run gh-pages",
     "dev": "npm run start:dev",
     "fetch:blocks": "pro fetch-blocks && npm run prettier",
     "gh-pages": "gh-pages -d dist",
@@ -31,7 +30,9 @@
     "test": "umi test",
     "test:all": "node ./tests/run-tests.js",
     "test:component": "umi test ./src/components",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "scp": "scp -r dist/* root@106.53.222.64:/home/deploy/admin.jyoketsu.com",
+    "deploy": "umi build && npm run scp"
   },
   "husky": {
     "hooks": {

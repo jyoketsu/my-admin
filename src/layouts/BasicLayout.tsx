@@ -16,7 +16,6 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { getAuthorityFromRouter } from '@/utils/utils';
-import logo from '../assets/logo.svg';
 
 const noMatch = (
   <Result
@@ -110,7 +109,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   };
   return (
     <ProLayout
-      logo={logo}
+      logo="/logo.png"
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
