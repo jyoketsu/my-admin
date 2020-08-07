@@ -42,7 +42,7 @@ export interface ArticleModelType {
   };
 }
 
-const UserModel: ArticleModelType = {
+const ArticleModel: ArticleModelType = {
   namespace: 'article',
 
   state: {
@@ -198,4 +198,4 @@ const UserModel: ArticleModelType = {
   },
 };
 
-export default UserModel;
+export default ArticleModel;

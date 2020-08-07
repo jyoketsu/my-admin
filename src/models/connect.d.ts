@@ -5,6 +5,7 @@ import { LinkModelState } from './link';
 import { CategoryModelState } from './category';
 import { TagModelState } from './tag';
 import { ArticleModelState } from './article';
+import { SystemModelState } from './system';
 
 export { GlobalModelState, UserModelState };
 
@@ -21,6 +22,7 @@ export interface Loading {
     category?: boolean;
     tag?: boolean;
     article?: boolean;
+    system?: boolean;
   };
 }
 
@@ -34,6 +36,7 @@ export interface ConnectState {
   category: CategoryModelState;
   tag: TagModelState;
   article: ArticleModelState;
+  system: SystemModelState;
 }
 
 export interface Route extends MenuDataItem {

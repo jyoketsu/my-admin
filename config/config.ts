@@ -116,6 +116,18 @@ export default defineConfig({
                 },
               ],
             },
+            {
+              path: '/service',
+              name: '服务管理',
+              icon: 'tool',
+              routes: [
+                {
+                  path: '/service/pm2',
+                  name: 'PM2服务',
+                  component: './service/pm2',
+                },
+              ],
+            },
             // {
             //   name: '表格',
             //   icon: 'table',

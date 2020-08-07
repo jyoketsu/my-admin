@@ -53,7 +53,7 @@ const UserModel: UserModelType = {
     },
 
     *loginByToken(action, { call, put }) {
-      const response = yield call(loginByToken);
+      const response = yield call(loginByToken, action.token);
       if (response.status === 200) {
         yield put({
           type: 'setUser',

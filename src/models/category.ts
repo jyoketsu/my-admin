@@ -31,7 +31,7 @@ export interface CategoryModelType {
   };
 }
 
-const UserModel: CategoryModelType = {
+const CategoryModel: CategoryModelType = {
   namespace: 'category',
 
   state: {
@@ -129,4 +129,4 @@ const UserModel: CategoryModelType = {
   },
 };
 
-export default UserModel;
+export default CategoryModel;

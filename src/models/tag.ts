@@ -32,7 +32,7 @@ export interface TagModelType {
   };
 }
 
-const UserModel: TagModelType = {
+const TagModel: TagModelType = {
   namespace: 'tag',
 
   state: {
@@ -132,4 +132,4 @@ const UserModel: TagModelType = {
   },
 };
 
-export default UserModel;
+export default TagModel;

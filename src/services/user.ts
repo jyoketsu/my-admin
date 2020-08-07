@@ -19,8 +19,12 @@ export function register(username: string, password: string) {
   });
 }
 
-export function loginByToken() {
-  return request.get(`${API_URL}/user/loginByToken`);
+export function loginByToken(token: string) {
+  return request.get(`${API_URL}/user/loginByToken`, {
+    headers: {
+      token,
+    },
+  });
 }
 
 export function detail(_id: string) {

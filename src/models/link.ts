@@ -33,7 +33,7 @@ export interface LinkModelType {
   };
 }
 
-const UserModel: LinkModelType = {
+const LinkModel: LinkModelType = {
   namespace: 'link',
 
   state: {
@@ -167,4 +167,4 @@ const UserModel: LinkModelType = {
   },
 };
 
-export default UserModel;
+export default LinkModel;

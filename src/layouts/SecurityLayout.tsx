@@ -26,9 +26,13 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     });
     const { dispatch, user } = this.props;
     if (dispatch && !user) {
-      dispatch({
-        type: 'user/loginByToken',
-      });
+      const token = window.localStorage.getItem('auth_token');
+      if (token) {
+        dispatch({
+          type: 'user/loginByToken',
+          token,
+        });
+      }
     }
   }
 
@@ -38,9 +42,6 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     // You can replace it to your authentication rule (such as check token exists)
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）
     const token = window.localStorage.getItem('auth_token');
-    const queryString = stringify({
-      redirect: window.location.href,
-    });
 
     if (!isReady) {
       return <PageLoading />;
@@ -50,7 +51,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       if (token) {
         // 使用token登录
       } else {
-        return <Redirect to={`/user/login?${queryString}`} />;
+        return <Redirect to="/user/login" />;
       }
     }
     return children;
