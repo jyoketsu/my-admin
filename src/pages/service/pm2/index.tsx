@@ -3,6 +3,7 @@ import { Card, List, Tag, Space, Button } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import { connect, Dispatch, ConnectProps } from 'umi';
 import { ConnectState } from '@/models/connect';
+import moment from 'moment';
 
 interface Props extends ConnectProps {
   dispatch: Dispatch;
@@ -31,7 +32,7 @@ const PM2: React.FC<Props> = ({ dispatch, pm2List }) => {
       name,
     });
   }
-  
+
   return (
     <PageContainer
       extra={[
@@ -61,7 +62,8 @@ const PM2: React.FC<Props> = ({ dispatch, pm2List }) => {
                       {item.pm2_env.status}
                     </Tag>
                     <span>{`CPU:${item.monit.cpu}%`}</span>
-                    <span>{`内存:${(item.monit.memory / 1024 / 1024 / 8).toFixed(2)}mb`}</span>
+                    <span>{`内存:${(item.monit.memory / 1024 / 1024 / 8).toFixed(2)}MB`}</span>
+                    <span>{`已运行:${moment(item.pm2_env.created_at).fromNow(true)}`}</span>
                   </Space>
                 }
               />

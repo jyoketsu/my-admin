@@ -89,6 +89,18 @@ export default defineConfig({
               ],
             },
             {
+              path: '/homepage',
+              name: '首页管理',
+              icon: 'home',
+              routes: [
+                {
+                  path: '/homepage/resume',
+                  name: 'Resume',
+                  component: './homepage/resume',
+                },
+              ],
+            },
+            {
               path: '/account',
               name: '个人中心',
               icon: 'user',
