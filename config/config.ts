@@ -95,7 +95,7 @@ export default defineConfig({
               routes: [
                 {
                   path: '/homepage/resume',
-                  name: 'Resume',
+                  name: '个人简历',
                   component: './homepage/resume',
                 },
               ],

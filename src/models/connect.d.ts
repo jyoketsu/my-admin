@@ -6,6 +6,7 @@ import { CategoryModelState } from './category';
 import { TagModelState } from './tag';
 import { ArticleModelState } from './article';
 import { SystemModelState } from './system';
+import { ResumeModelState } from './resume';
 
 export { GlobalModelState, UserModelState };
 
@@ -23,6 +24,7 @@ export interface Loading {
     tag?: boolean;
     article?: boolean;
     system?: boolean;
+    resume?: boolean;
   };
 }
 
@@ -37,6 +39,7 @@ export interface ConnectState {
   tag: TagModelState;
   article: ArticleModelState;
   system: SystemModelState;
+  resume: ResumeModelState;
 }
 
 export interface Route extends MenuDataItem {

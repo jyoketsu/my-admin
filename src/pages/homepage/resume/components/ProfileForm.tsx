@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, DatePicker } from 'antd';
 import { FieldData } from '../interfaces';
 
 const { TextArea } = Input;
@@ -7,7 +7,8 @@ const { TextArea } = Input;
 interface CustomizedFormProps {
   onChange: (fields: FieldData[]) => void;
   fields: FieldData[];
-  onSubmit: (fields: any) => void;
+  form: any;
+  // onSubmit: (fields: any) => void;
 }
 
 const layout = {
@@ -15,48 +16,27 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const ProfileForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onSubmit }) => {
+const ProfileForm: React.FC<CustomizedFormProps> = ({ onChange, fields, form }) => {
   return (
     <Form
       {...layout}
-      style={{ width: '500px' }}
-      name="user_info_form"
+      form={form}
+      style={{ maxWidth: '500px' }}
+      name="profile_form"
       fields={fields}
       onFieldsChange={(changedFields, allFields) => {
         onChange(allFields as FieldData[]);
       }}
-      onFinish={(values) => onSubmit(values)}
+      // onFinish={(values) => onSubmit(values)}
     >
-      <Form.Item
-        name="username"
-        label="用户名"
-        rules={[{ required: true, message: '请输入用户名！' }]}
-      >
+      <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名！' }]}>
         <Input />
       </Form.Item>
       <Form.Item
-        name="avatar"
-        label="头像地址"
-        rules={[{ pattern: new RegExp('[a-zA-z]+://[^s]*'), message: '请输入正确的地址！' }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        label="E-mail"
+        name="about"
+        label="自我介绍"
         rules={[
-          {
-            type: 'email',
-            message: '请输入正确的邮箱地址！',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="profile"
-        label="个人简介"
-        rules={[
+          { required: true, message: '请输入自我介绍！' },
           {
             max: 500,
             message: '不超过500个字符！',
@@ -65,10 +45,58 @@ const ProfileForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onSubmit
       >
         <TextArea rows={3} />
       </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          更新基本信息
-        </Button>
+      <Form.Item
+        name="education"
+        label="学历"
+        rules={[{ required: true, message: '请输入学历！' }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item name="location" label="地点" rules={[{ required: true, message: '请输入地点！' }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="birthYear"
+        label="出生日期"
+        rules={[{ required: true, message: '请输入出生日期！' }]}
+      >
+        <DatePicker />
+      </Form.Item>
+      <Form.Item name="position" label="职位" rules={[{ required: true, message: '请输入职位！' }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="email"
+        label="邮箱"
+        rules={[
+          { required: true, message: '请输入邮箱！' },
+          {
+            type: 'email',
+            message: '请输入正确的邮箱地址！',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item name="phone" label="电话" rules={[{ required: true, message: '请输入电话！' }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="website"
+        label="个人网站"
+        rules={[
+          { required: true, message: '请输入个人网站！' },
+          { pattern: new RegExp('[a-zA-z]+://[^s]*'), message: '请输入正确的地址！' },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="githubName"
+        label="github用户名"
+        rules={[{ required: true, message: '请输入github用户名！' }]}
+      >
+        <Input />
       </Form.Item>
     </Form>
   );
