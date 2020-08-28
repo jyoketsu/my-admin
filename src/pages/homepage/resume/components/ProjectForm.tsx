@@ -30,14 +30,14 @@ const ProjectForm: React.FC<CustomizedFormProps> = ({ onChange, fields, form }) 
       }}
     >
       <Form.Item name="name" label="项目名" rules={[{ required: true, message: '请输入项目名！' }]}>
-        <Input />
+        <Input placeholder="请输入项目名" />
       </Form.Item>
       <Form.Item
         name="platform"
         label="所用技能"
         rules={[{ required: true, message: '请输入所用技能！' }]}
       >
-        <Input />
+        <Input placeholder="请输入项目中用到的技能" />
       </Form.Item>
       <Form.Item
         name="timeperiod"
@@ -51,14 +51,14 @@ const ProjectForm: React.FC<CustomizedFormProps> = ({ onChange, fields, form }) 
         label="项目描述"
         rules={[{ required: true, message: '请输入项目描述！' }]}
       >
-        <TextArea rows={4} />
+        <TextArea rows={4} placeholder="请输入项目描述" />
       </Form.Item>
       <Form.Item
         name="url"
         label="项目地址"
         rules={[{ pattern: new RegExp('[a-zA-z]+://[^s]*'), message: '请输入正确的地址！' }]}
       >
-        <Input />
+        <Input placeholder="请输入项目地址" />
       </Form.Item>
     </Form>
   );

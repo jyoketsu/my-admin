@@ -38,12 +38,14 @@ export interface Profile {
 }
 
 export interface Skill {
+  _id:string;
   name: string;
   level: number;
   iconUri: string;
 }
 
 export interface Experience {
+  _id:string;
   company: string;
   position: string;
   startTime: Date;
@@ -52,6 +54,7 @@ export interface Experience {
 }
 
 export interface Project {
+  _id:string;
   name: string;
   platform: string;
   timeperiod: string[];

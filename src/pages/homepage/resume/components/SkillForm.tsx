@@ -27,7 +27,7 @@ const SkillForm: React.FC<CustomizedFormProps> = ({ onChange, fields, form }) =>
       }}
     >
       <Form.Item name="name" label="技能名" rules={[{ required: true, message: '请输入技能名！' }]}>
-        <Input />
+        <Input placeholder="请输入技能名" />
       </Form.Item>
       <Form.Item
         name="level"
@@ -41,7 +41,7 @@ const SkillForm: React.FC<CustomizedFormProps> = ({ onChange, fields, form }) =>
         label="技能图标"
         rules={[{ pattern: new RegExp('[a-zA-z]+://[^s]*'), message: '请输入正确的地址！' }]}
       >
-        <Input />
+        <Input placeholder="请输入技能图标" />
       </Form.Item>
     </Form>
   );

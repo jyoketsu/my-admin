@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -19,7 +20,7 @@ import {
 } from 'antd';
 import { Resume as ResumeType } from '@/models/resume';
 import { User as UserType } from '@/models/user';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { Skill, Experience, Project } from '@/services/resume';
 import { FieldData } from './interfaces';
@@ -31,6 +32,7 @@ import ProjectForm from './components/ProjectForm';
 
 const { Meta } = Card;
 const { Option } = Select;
+const { confirm } = Modal;
 
 interface Props extends ConnectProps {
   dispatch: Dispatch;
@@ -72,6 +74,7 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
   ]);
 
   const [skillFields, setSkillFields] = useState([
+    { name: ['_id'], value: '' },
     { name: ['name'], value: '' },
     { name: ['level'], value: 0 },
     { name: ['iconUri'], value: '' },
@@ -82,6 +85,7 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
   ]);
 
   const [expFields, setExpFields] = useState([
+    { name: ['_id'], value: '' },
     { name: ['company'], value: '' },
     { name: ['position'], value: '' },
     { name: ['startTime'], value: '' },
@@ -90,6 +94,7 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
   ]);
 
   const [projectFields, setProjectFields] = useState([
+    { name: ['_id'], value: '' },
     { name: ['name'], value: '' },
     { name: ['platform'], value: '' },
     { name: ['timeperiod'], value: '' },
@@ -181,13 +186,30 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
       .validateFields()
       .then(() => {
         const newSkills = JSON.parse(JSON.stringify(skills));
-        newSkills.push({
-          name: skillForm.getFieldValue('name'),
-          level: skillForm.getFieldValue('level'),
-          iconUri: skillForm.getFieldValue('iconUri'),
-        });
+        const _id = skillForm.getFieldValue('_id');
+        if (_id) {
+          // 编辑
+          const index = newSkills.findIndex((exp: Experience) => exp._id === _id);
+          if (index !== -1) {
+            newSkills[index] = {
+              _id,
+              name: skillForm.getFieldValue('name'),
+              level: skillForm.getFieldValue('level'),
+              iconUri: skillForm.getFieldValue('iconUri'),
+            };
+          }
+        } else {
+          // 新增
+          newSkills.push({
+            _id,
+            name: skillForm.getFieldValue('name'),
+            level: skillForm.getFieldValue('level'),
+            iconUri: skillForm.getFieldValue('iconUri'),
+          });
+        }
         setskillformVisible(false);
         setskills(newSkills);
+        skillForm.resetFields();
       })
       .catch(() => {
         // message.info(JSON.stringify(info));
@@ -199,19 +221,66 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
       .validateFields()
       .then(() => {
         const newExperience = JSON.parse(JSON.stringify(experience));
-        newExperience.push({
-          company: expForm.getFieldValue('company'),
-          position: expForm.getFieldValue('position'),
-          startTime: expForm.getFieldValue('startTime'),
-          endTime: expForm.getFieldValue('endTime'),
-          description: expForm.getFieldValue('description'),
-        });
+        if (expForm.getFieldValue('_id')) {
+          // 编辑
+          const index = newExperience.findIndex(
+            (exp: Experience) => exp._id === expForm.getFieldValue('_id'),
+          );
+          if (index !== -1) {
+            newExperience[index] = {
+              _id: expForm.getFieldValue('_id'),
+              company: expForm.getFieldValue('company'),
+              position: expForm.getFieldValue('position'),
+              startTime: expForm.getFieldValue('startTime'),
+              endTime: expForm.getFieldValue('endTime'),
+              description: expForm.getFieldValue('description'),
+            };
+          }
+        } else {
+          // 新增
+          newExperience.push({
+            _id: expForm.getFieldValue('_id'),
+            company: expForm.getFieldValue('company'),
+            position: expForm.getFieldValue('position'),
+            startTime: expForm.getFieldValue('startTime'),
+            endTime: expForm.getFieldValue('endTime'),
+            description: expForm.getFieldValue('description'),
+          });
+        }
         setexpformVisible(false);
         setexperience(newExperience);
+        expForm.resetFields();
       })
       .catch(() => {
         // message.info(JSON.stringify(info));
       });
+  };
+
+  const deleteSkillConfirm = (_id: string, name: string) => {
+    confirm({
+      title: `确定要删除【${name}】吗？`,
+      icon: <ExclamationCircleOutlined />,
+      content: `删除技能-${name}`,
+      onOk() {},
+    });
+  };
+
+  const deleteExpConfirm = (_id: string, name: string) => {
+    confirm({
+      title: `确定要删除【${name}】吗？`,
+      icon: <ExclamationCircleOutlined />,
+      content: `删除工作经验-${name}`,
+      onOk() {},
+    });
+  };
+
+  const deleteProjectConfirm = (_id: string, name: string) => {
+    confirm({
+      title: `确定要删除【${name}】吗？`,
+      icon: <ExclamationCircleOutlined />,
+      content: `删除项目经验-${name}`,
+      onOk() {},
+    });
   };
 
   const addProject = () => {
@@ -219,15 +288,35 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
       .validateFields()
       .then(() => {
         const newProjects = JSON.parse(JSON.stringify(projects));
-        newProjects.push({
-          name: projectForm.getFieldValue('name'),
-          platform: projectForm.getFieldValue('platform'),
-          timeperiod: projectForm.getFieldValue('timeperiod'),
-          description: projectForm.getFieldValue('description'),
-          url: projectForm.getFieldValue('url'),
-        });
+        if (projectForm.getFieldValue('_id')) {
+          // 编辑
+          const index = newProjects.findIndex(
+            (exp: Project) => exp._id === projectForm.getFieldValue('_id'),
+          );
+          if (index !== -1) {
+            newProjects[index] = {
+              _id: projectForm.getFieldValue('_id'),
+              name: projectForm.getFieldValue('name'),
+              platform: projectForm.getFieldValue('platform'),
+              timeperiod: projectForm.getFieldValue('timeperiod'),
+              description: projectForm.getFieldValue('description'),
+              url: projectForm.getFieldValue('url'),
+            };
+          }
+        } else {
+          // 新增
+          newProjects.push({
+            _id: projectForm.getFieldValue('_id'),
+            name: projectForm.getFieldValue('name'),
+            platform: projectForm.getFieldValue('platform'),
+            timeperiod: projectForm.getFieldValue('timeperiod'),
+            description: projectForm.getFieldValue('description'),
+            url: projectForm.getFieldValue('url'),
+          });
+        }
         setprojectformVisible(false);
         setprojects(newProjects);
+        projectForm.resetFields();
       })
       .catch(() => {
         // message.info(JSON.stringify(info));
@@ -275,17 +364,18 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
                     <EditOutlined
                       key="edit"
                       onClick={() => {
-                        // setFields([
-                        //   { name: ['_id'], value: tag._id },
-                        //   { name: ['name'], value: tag.name },
-                        //   { name: ['color'], value: tag.color },
-                        // ]);
+                        setSkillFields([
+                          { name: ['_id'], value: skill._id },
+                          { name: ['name'], value: skill.name },
+                          { name: ['level'], value: skill.level },
+                          { name: ['iconUri'], value: skill.iconUri },
+                        ]);
                         setskillformVisible(true);
                       }}
                     />,
                     <DeleteOutlined
                       key="delete"
-                      // onClick={() => deleteConfirm(tag)}
+                      onClick={() => deleteSkillConfirm(skill._id, skill.name)}
                     />,
                   ]}
                 >
@@ -330,17 +420,23 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
                   <EditOutlined
                     key="edit"
                     onClick={() => {
-                      // setFields([
-                      //   { name: ['_id'], value: tag._id },
-                      //   { name: ['name'], value: tag.name },
-                      //   { name: ['color'], value: tag.color },
-                      // ]);
+                      setExpFields([
+                        { name: ['_id'], value: item._id },
+                        { name: ['company'], value: item.company },
+                        { name: ['position'], value: item.position },
+                        {
+                          name: ['startTime'],
+                          value: item.startTime ? moment(item.startTime) : '',
+                        },
+                        { name: ['endTime'], value: item.endTime ? moment(item.endTime) : '' },
+                        { name: ['description'], value: item.description },
+                      ]);
                       setexpformVisible(true);
                     }}
                   />,
                   <DeleteOutlined
                     key="delete"
-                    // onClick={() => deleteConfirm(tag)}
+                    onClick={() => deleteExpConfirm(item._id, item.company)}
                   />,
                 ]}
               >
@@ -373,17 +469,25 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
                   <EditOutlined
                     key="edit"
                     onClick={() => {
-                      // setFields([
-                      //   { name: ['_id'], value: tag._id },
-                      //   { name: ['name'], value: tag.name },
-                      //   { name: ['color'], value: tag.color },
-                      // ]);
+                      setProjectFields([
+                        { name: ['_id'], value: item._id },
+                        { name: ['name'], value: item.name },
+                        { name: ['platform'], value: item.platform },
+                        {
+                          name: ['timeperiod'],
+                          value: item.timeperiod
+                            ? [moment(item.timeperiod[0]), moment(item.timeperiod[1])]
+                            : '',
+                        },
+                        { name: ['description'], value: item.description },
+                        { name: ['url'], value: item.url },
+                      ]);
                       setprojectformVisible(true);
                     }}
                   />,
                   <DeleteOutlined
                     key="delete"
-                    // onClick={() => deleteConfirm(tag)}
+                    onClick={() => deleteProjectConfirm(item._id, item.name)}
                   />,
                 ]}
               >
@@ -414,10 +518,7 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
         visible={skillformVisible}
         onOk={addSkill}
         onCancel={() => {
-          // setFields([
-          //   { name: ['_id'], value: undefined },
-          //   { name: ['name'], value: undefined },
-          // ]);
+          skillForm.resetFields();
           setskillformVisible(false);
         }}
         okText="提交"
@@ -435,6 +536,7 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
         visible={expformVisible}
         onOk={addExp}
         onCancel={() => {
+          expForm.resetFields();
           setexpformVisible(false);
         }}
         okText="提交"
@@ -460,6 +562,7 @@ const Resume: React.FC<Props> = ({ dispatch, resume, getting, user }) => {
           form={projectForm}
           fields={projectFields as FieldData[]}
           onChange={(newFields) => {
+            projectForm.resetFields();
             setProfileFields(newFields);
           }}
         />
